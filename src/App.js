@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import axios from 'axios';
 import MenuItem from './MenuItem.js'
 
 class App extends React.Component {
@@ -18,6 +19,7 @@ class App extends React.Component {
       'dessert': 10,
     };
     // bind all the functions to this
+    this.getFood = this.getFood.bind(this);
   }
 
   // function getFood - axios call to https://entree-f18.herokuapp.com/v1/menu/25
@@ -30,6 +32,18 @@ class App extends React.Component {
   // 'section': 'snacks',
   // 'price': '$44.29',
   // }
+  getFood() {
+    let apiUrl = 'https://entree-f18.herokuapp.com/v1/menu/25';
+    axios.get(apiUrl)
+      .then(function (response) {
+        console.log(response);
+        return(response);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  }
 
   // function setMenuView to be run by clicking menuSections buttons
   // takes button id as input
@@ -48,6 +62,9 @@ class App extends React.Component {
       this.setState(savedState);
     } else {
       window.localStorage.setItem('savedState', JSON.stringify(this.state));
+    };
+    if (this.state.food.length < 53 ) {
+      let apiOutput = this.getFood();
     }
   }
 
