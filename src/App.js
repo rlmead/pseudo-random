@@ -11,13 +11,13 @@ class App extends React.Component {
       food: [],
       menuView: 'snacks',
     };
-    this.menuSections = {
-      'snacks': 15,
-      'brunch': 8,
-      'appetizers': 12,
-      'dinner': 8,
-      'dessert': 10,
-    };
+    this.menuSections = [
+      { 'name': 'snacks', 'count': 15 },
+      { 'name': 'brunch', 'count': 8 },
+      { 'name': 'appetizers', 'count': 12 },
+      { 'name': 'dinner', 'count': 8 },
+      { 'name': 'dessert', 'count': 10 },
+    ];
     // bind all the functions to this
     this.getFood = this.getFood.bind(this);
   }
@@ -35,13 +35,27 @@ class App extends React.Component {
   async getFood() {
     let apiUrl = 'https://entree-f18.herokuapp.com/v1/menu/25';
     let newFood = this.state.food;
+    let menuSections = this.menuSections;
     return await axios.get(apiUrl)
       .then(function (response) {
         for (let item of response.data.menu_items) {
           if (newFood.length < 53) {
             let name = item.description.split('with')[0].trim();
             let sides = item.description.split('with')[1].trim();
-            newFood.push({'name': name, 'sides': sides});
+            // make sure that name & sides are unique
+            // add math to determine which section this item will be in
+            let sectionIndex =
+              menuSections.map((section, index) => menuSections.slice(0, index)
+              .reduce((acc, curr) => acc + curr.count, 0))
+              .map(count => count > newFood.length)
+              .lastIndexOf(false);
+            // add silly price calculation
+            let price = '$0';
+            newFood.push({
+              'name': name,
+              'sides': sides,
+              'section': menuSections[sectionIndex].name,
+              'price': price });
           };
         };
         return newFood;
