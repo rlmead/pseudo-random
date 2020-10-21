@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios';
-import MenuItem from './MenuItem.js'
+import { Nav, NavItem, NavLink } from 'reactstrap';
+// import MenuItem from './MenuItem.js'
 
 class App extends React.Component {
   // store state with constructor
@@ -12,26 +13,18 @@ class App extends React.Component {
       menuView: 'snacks',
     };
     this.menuSections = [
-      { 'main': 'snacks', 'count': 15 },
-      { 'main': 'brunch', 'count': 8 },
-      { 'main': 'appetizers', 'count': 12 },
-      { 'main': 'dinner', 'count': 8 },
-      { 'main': 'dessert', 'count': 10 },
+      { 'name': 'snacks', 'count': 15 },
+      { 'name': 'brunch', 'count': 8 },
+      { 'name': 'appetizers', 'count': 12 },
+      { 'name': 'dinner', 'count': 8 },
+      { 'name': 'dessert', 'count': 10 },
     ];
     // bind all the functions to this
     this.getFood = this.getFood.bind(this);
   }
 
-  // function getFood - axios call to https://entree-f18.herokuapp.com/v1/menu/25
-  // to be run when this.state.food = [] (if it hasn't been updated from localStorage)
-  // keep running until there are enough (53) items (use foreach to iterate through menuSections?)
-  // food array items will be formatted like so:
-  // {
-  // 'main': 'Overturned ribeye',
-  // 'extras': 'aggressive tomatoes, fragrant cabbage',
-  // 'section': 'snacks',
-  // 'price': '$44.29',
-  // }
+  // function to be run when there are no saved menu items
+  // to get collect and format data from silly menu API
   async getFood() {
     let apiUrl = 'https://entree-f18.herokuapp.com/v1/menu/25';
     let newFood = this.state.food;
@@ -57,13 +50,13 @@ class App extends React.Component {
               '$' + (main.split('')
                 .map(char => char.charCodeAt(0))
                 .reduce((acc, cur) => acc + cur)
-                / (menuSections[sectionIndex].count*15))
+                / (menuSections[sectionIndex].count * 15))
                 .toFixed(2)
                 .toString();
             newFood.push({
               'main': main,
               'extras': extras,
-              'section': menuSections[sectionIndex].main,
+              'section': menuSections[sectionIndex].name,
               'price': price
             });
           };
@@ -76,15 +69,11 @@ class App extends React.Component {
       });
   }
 
-  // function setMenuView to be run by clicking menuSections buttons
-  // takes button id as input
-  // updates this.state.menuView
-
-  // function calculatePrice
-  // do some silly math according to the food array item's main and section
-  // add up character codes for each character in the main
-  // then divide by different numbers according to section
-
+  // function setView to be run by clicking menuSections buttons
+  // updates this.state.menuView according to event.target.id
+  setView(viewName) {
+    this.setState({ menuView: viewName })
+  }
 
   // load savedState from localStorage if it's there
   async componentDidMount() {
@@ -112,9 +101,26 @@ class App extends React.Component {
         <h1>pseudo random</h1>
         <p>three forty eight east main street lexington kentucky united states of america</p>
 
-        {/* nav bar
-          generated with Object.keys(menuSections).map ...
-          with buttons that run setMenuView */}
+        {/* nav bar with buttons that run setMenuView */}
+        <Nav
+          justified={true}
+          tabs={true}>
+          {
+            this.menuSections.map((item, index) => {
+              return (
+                <NavItem
+                  key={'button-' + index}>
+                  <NavLink
+                    className={(this.state.menuView === item.name) ? 'active' : ''}
+                    id={item.name}
+                    onClick={() => this.setView(item.name)}>
+                    {item.name}
+                  </NavLink>
+                </NavItem>
+              )
+            })
+          }
+        </Nav>
 
         {/* menu items list
           generated with items in food.filter(item => (item.section === menuView))
