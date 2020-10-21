@@ -12,11 +12,11 @@ class App extends React.Component {
       menuView: 'snacks',
     };
     this.menuSections = [
-      { 'name': 'snacks', 'count': 15 },
-      { 'name': 'brunch', 'count': 8 },
-      { 'name': 'appetizers', 'count': 12 },
-      { 'name': 'dinner', 'count': 8 },
-      { 'name': 'dessert', 'count': 10 },
+      { 'main': 'snacks', 'count': 15 },
+      { 'main': 'brunch', 'count': 8 },
+      { 'main': 'appetizers', 'count': 12 },
+      { 'main': 'dinner', 'count': 8 },
+      { 'main': 'dessert', 'count': 10 },
     ];
     // bind all the functions to this
     this.getFood = this.getFood.bind(this);
@@ -27,8 +27,8 @@ class App extends React.Component {
   // keep running until there are enough (53) items (use foreach to iterate through menuSections?)
   // food array items will be formatted like so:
   // {
-  // 'name': 'Overturned ribeye',
-  // 'sides': 'aggressive tomatoes, fragrant cabbage',
+  // 'main': 'Overturned ribeye',
+  // 'extras': 'aggressive tomatoes, fragrant cabbage',
   // 'section': 'snacks',
   // 'price': '$44.29',
   // }
@@ -39,13 +39,13 @@ class App extends React.Component {
     return await axios.get(apiUrl)
       .then(function (response) {
         for (let item of response.data.menu_items) {
-          let name = item.description.split('with')[0].trim().toLowerCase();
-          let sides = item.description.split('with')[1].trim().toLowerCase();
+          let main = item.description.split('with')[0].trim().toLowerCase();
+          let extras = item.description.split('with')[1].trim().toLowerCase();
           // get exactly 53 items
-          // and make sure that name & sides are unique in all cases
+          // and make sure that main & extras are unique in all cases
           if (newFood.length < 53
-            && newFood.map(item => item.name).indexOf(name) === -1
-            && newFood.map(item => item.sides).indexOf(sides) === -1) {
+            && newFood.map(item => item.main).indexOf(main) === -1
+            && newFood.map(item => item.extras).indexOf(extras) === -1) {
             // add math to determine which section this item will be in
             let sectionIndex =
               menuSections.map((section, index) => menuSections.slice(0, index)
@@ -53,11 +53,17 @@ class App extends React.Component {
                 .map(count => count > newFood.length)
                 .lastIndexOf(false);
             // add silly price calculation
-            let price = '$0';
+            let price =
+              '$' + (main.split('')
+                .map(char => char.charCodeAt(0))
+                .reduce((acc, cur) => acc + cur)
+                / (menuSections[sectionIndex].count*15))
+                .toFixed(2)
+                .toString();
             newFood.push({
-              'name': name,
-              'sides': sides,
-              'section': menuSections[sectionIndex].name,
+              'main': main,
+              'extras': extras,
+              'section': menuSections[sectionIndex].main,
               'price': price
             });
           };
@@ -75,8 +81,8 @@ class App extends React.Component {
   // updates this.state.menuView
 
   // function calculatePrice
-  // do some silly math according to the food array item's name and section
-  // add up character codes for each character in the name
+  // do some silly math according to the food array item's main and section
+  // add up character codes for each character in the main
   // then divide by different numbers according to section
 
 
