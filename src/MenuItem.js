@@ -1,7 +1,7 @@
 import React from 'react';
 
 function MenuItem(props) {
-    return(
+    return (
         <div>
             <h4>{props.data.name}</h4>
             <p>{props.data.sides}</p>

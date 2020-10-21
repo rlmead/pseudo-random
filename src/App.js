@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios';
-import { Nav, NavItem, NavLink } from 'reactstrap';
+import Header from './Header.js';
 // import MenuItem from './MenuItem.js'
 
 class App extends React.Component {
@@ -21,6 +21,7 @@ class App extends React.Component {
     ];
     // bind all the functions to this
     this.getFood = this.getFood.bind(this);
+    this.setView = this.setView.bind(this);
   }
 
   // function to be run when there are no saved menu items
@@ -95,33 +96,11 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-
-        {/* static header with restaurant name */}
-        {/* exciting food picture (semi-transparent?) as background */}
-        <h1>pseudo random</h1>
-        <p>three forty eight east main street lexington kentucky united states of america</p>
-
-        {/* nav bar with buttons that run setMenuView */}
-        <Nav
-          justified={true}
-          tabs={true}>
-          {
-            this.menuSections.map((item, index) => {
-              return (
-                <NavItem
-                  key={'button-' + index}>
-                  <NavLink
-                    className={(this.state.menuView === item.name) ? 'active' : ''}
-                    id={item.name}
-                    onClick={() => this.setView(item.name)}>
-                    {item.name}
-                  </NavLink>
-                </NavItem>
-              )
-            })
-          }
-        </Nav>
-
+        <Header
+          menuSections={this.menuSections}
+          setView={this.setView}
+          menuView={this.state.menuView}
+        />
         {/* menu items list
           generated with items in food.filter(item => (item.section === menuView))
           <MenuItem data={item} />
