@@ -39,10 +39,13 @@ class App extends React.Component {
     return await axios.get(apiUrl)
       .then(function (response) {
         for (let item of response.data.menu_items) {
-          if (newFood.length < 53) {
-            let name = item.description.split('with')[0].trim();
-            let sides = item.description.split('with')[1].trim();
-            // make sure that name & sides are unique
+          let name = item.description.split('with')[0].trim().toLowerCase();
+          let sides = item.description.split('with')[1].trim().toLowerCase();
+          // get exactly 53 items
+          // and make sure that name & sides are unique in all cases
+          if (newFood.length < 53
+            && newFood.map(item => item.name).indexOf(name) === -1
+            && newFood.map(item => item.sides).indexOf(sides) === -1) {
             // add math to determine which section this item will be in
             let sectionIndex =
               menuSections.map((section, index) => menuSections.slice(0, index)
