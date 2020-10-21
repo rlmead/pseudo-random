@@ -41,13 +41,13 @@ class App extends React.Component {
           if (newFood.length < menuSections.reduce((acc, curr) => acc + curr.count, 0)
             && newFood.map(item => item.main).indexOf(main) === -1
             && newFood.map(item => item.extras).indexOf(extras) === -1) {
-            // add math to determine which section this item will be in
+            // do silly array manipulation to determine which section this item will be in
             let sectionIndex =
               menuSections.map((section, index) => menuSections.slice(0, index)
                 .reduce((acc, curr) => acc + curr.count, 0))
                 .map(count => count > newFood.length)
                 .lastIndexOf(false);
-            // add silly price calculation
+            // do silly price calculation
             let price =
               '$' + (main.split('')
                 .map(char => char.charCodeAt(0))
