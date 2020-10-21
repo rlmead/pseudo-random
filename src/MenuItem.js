@@ -1,12 +1,19 @@
 import React from 'react';
+import { ListGroupItem } from 'reactstrap';
 
 function MenuItem(props) {
     return (
-        <div>
-            <h4>{props.data.name}</h4>
-            <p>{props.data.sides}</p>
-            <h5>{props.data.price}</h5>
-        </div>
+        <ListGroupItem >
+            <div className='row'>
+                <div className='col-10'>
+                    <p style={{ fontWeight: 'bold' }}>{props.data.main}</p>
+                    {(props.data.section === 'brunch' || props.data.section === 'dinner') && <p>with {props.data.extras}</p>}
+                </div>
+                <div className='col-2'>
+                    <p>{props.data.price}</p>
+                </div>
+            </div>
+        </ListGroupItem>
     )
 }
 

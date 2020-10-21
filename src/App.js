@@ -2,8 +2,8 @@ import React from 'react';
 import './App.css';
 import axios from 'axios';
 import Header from './Header.js';
-import { ListGroup, ListGroupItem } from 'reactstrap';
-// import MenuItem from './MenuItem.js'
+import { ListGroup } from 'reactstrap';
+import MenuItem from './MenuItem.js'
 
 class App extends React.Component {
   // store state with constructor
@@ -112,11 +112,10 @@ class App extends React.Component {
           {
             this.state.food.filter(item => (item.section === this.state.menuView)).map((item, index) => {
               return (
-                <ListGroupItem
-                  key={index}
-                  id={item.main}>
-                  <span style={{fontWeight: 'bold'}}>{item.main}</span>
-                </ListGroupItem>
+                <MenuItem
+                data={item}
+                key={index}
+                />
               )
             })
           }
