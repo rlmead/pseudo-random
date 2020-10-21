@@ -6,7 +6,7 @@ import { faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 
 function Header(props) {
-    const [modal, setModal] = useState(false);  
+    const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
     return (
         <>
@@ -28,8 +28,18 @@ function Header(props) {
                             <FontAwesomeIcon icon={faGlobeAmericas} size='2x' />
                         </div>
                         <div className='col-2'>
-                            <FontAwesomeIcon icon={faClock} size='2x' />
-
+                            <FontAwesomeIcon icon={faClock} size='2x' onClick={toggle} />
+                            <Modal isOpen={modal} toggle={toggle}>
+                                <ModalHeader toggle={toggle}>
+                                    don't come here.
+                                </ModalHeader>
+                                <ModalBody>
+                                    we are currently closed due to covid-19.
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="primary" onClick={toggle}>okay</Button>
+                                </ModalFooter>
+                            </Modal>
                         </div>
                     </div>
                 </Container>
