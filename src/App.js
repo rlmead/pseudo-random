@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import axios from 'axios';
 import Header from './Header.js';
+import { ListGroup, ListGroupItem } from 'reactstrap';
 // import MenuItem from './MenuItem.js'
 
 class App extends React.Component {
@@ -35,9 +36,9 @@ class App extends React.Component {
         for (let item of response.data.menu_items) {
           let main = item.description.split('with')[0].trim().toLowerCase();
           let extras = item.description.split('with')[1].trim().toLowerCase();
-          // get exactly 53 items
+          // get exactly the required number of items
           // and make sure that main & extras are unique in all cases
-          if (newFood.length < 53
+          if (newFood.length < menuSections.reduce((acc, curr) => acc + curr.count, 0)
             && newFood.map(item => item.main).indexOf(main) === -1
             && newFood.map(item => item.extras).indexOf(extras) === -1) {
             // add math to determine which section this item will be in
@@ -82,7 +83,7 @@ class App extends React.Component {
     if (savedState) {
       this.setState(savedState);
     } else {
-      while (this.state.food.length < 53) {
+      while (this.state.food.length < this.menuSections.reduce((acc, curr) => acc + curr.count, 0)) {
         this.setState({ food: await this.getFood() });
       };
     }
@@ -105,6 +106,21 @@ class App extends React.Component {
           generated with items in food.filter(item => (item.section === menuView))
           <MenuItem data={item} />
         */}
+        <ListGroup
+        flush
+        className='text-left'>
+          {
+            this.state.food.filter(item => (item.section === this.state.menuView)).map((item, index) => {
+              return (
+                <ListGroupItem
+                  key={index}
+                  id={item.main}>
+                  <span style={{fontWeight: 'bold'}}>{item.main}</span>
+                </ListGroupItem>
+              )
+            })
+          }
+        </ListGroup>
 
       </div>
     );

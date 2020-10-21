@@ -15,6 +15,7 @@ function Header(props) {
 
             <Jumbotron
                 fluid
+                className='mb-1'
                 style={{backgroundImage:'url(https://images.unsplash.com/photo-1544070078-a212eda27b49?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80)'}}>
                 <Container
                 className='text-light'>
@@ -36,7 +37,7 @@ function Header(props) {
                                     className={(props.menuView === item.name) ? 'active' : ''}
                                     id={item.name}
                                     onClick={() => props.setView(item.name)}>
-                                    {item.name}
+                                    <h5>{item.name}</h5>
                                 </NavLink>
                             </NavItem>
                         )
