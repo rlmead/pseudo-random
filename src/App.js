@@ -32,12 +32,19 @@ class App extends React.Component {
   // 'section': 'snacks',
   // 'price': '$44.29',
   // }
-  getFood() {
+  async getFood() {
     let apiUrl = 'https://entree-f18.herokuapp.com/v1/menu/25';
-    axios.get(apiUrl)
+    let newFood = this.state.food;
+    return await axios.get(apiUrl)
       .then(function (response) {
-        console.log(response);
-        return(response);
+        for (let item of response.data.menu_items) {
+          if (newFood.length < 53) {
+            let name = item.description.split('with')[0].trim();
+            let sides = item.description.split('with')[1].trim();
+            newFood.push({'name': name, 'sides': sides});
+          };
+        };
+        return newFood;
       })
       .catch(function (error) {
         // handle error
@@ -56,16 +63,14 @@ class App extends React.Component {
 
 
   // load savedState from localStorage if it's there
-  componentDidMount() {
+  async componentDidMount() {
     let savedState = JSON.parse(window.localStorage.getItem('savedState'));
     if (savedState) {
       this.setState(savedState);
-    } else {
-      window.localStorage.setItem('savedState', JSON.stringify(this.state));
     };
-    if (this.state.food.length < 53 ) {
-      let apiOutput = this.getFood();
-    }
+    while (this.state.food.length < 53) {
+      this.setState({ food: await this.getFood() });
+    };
   }
 
   // keep localStorage up to date with this.state
