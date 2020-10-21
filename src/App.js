@@ -46,16 +46,17 @@ class App extends React.Component {
             // add math to determine which section this item will be in
             let sectionIndex =
               menuSections.map((section, index) => menuSections.slice(0, index)
-              .reduce((acc, curr) => acc + curr.count, 0))
-              .map(count => count > newFood.length)
-              .lastIndexOf(false);
+                .reduce((acc, curr) => acc + curr.count, 0))
+                .map(count => count > newFood.length)
+                .lastIndexOf(false);
             // add silly price calculation
             let price = '$0';
             newFood.push({
               'name': name,
               'sides': sides,
               'section': menuSections[sectionIndex].name,
-              'price': price });
+              'price': price
+            });
           };
         };
         return newFood;
@@ -81,10 +82,11 @@ class App extends React.Component {
     let savedState = JSON.parse(window.localStorage.getItem('savedState'));
     if (savedState) {
       this.setState(savedState);
-    };
-    while (this.state.food.length < 53) {
-      this.setState({ food: await this.getFood() });
-    };
+    } else {
+      while (this.state.food.length < 53) {
+        this.setState({ food: await this.getFood() });
+      };
+    }
   }
 
   // keep localStorage up to date with this.state
