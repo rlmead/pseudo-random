@@ -14,7 +14,7 @@ function Header(props) {
             <Jumbotron
                 fluid
                 className='mb-1 text-left'
-                style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1544070078-a212eda27b49?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80)' }}>
+                style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1544070078-a212eda27b49?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop)', backgroundSize: '100%' }}>
                 <Container
                     className='text-light'>
                     <div className='row'>
